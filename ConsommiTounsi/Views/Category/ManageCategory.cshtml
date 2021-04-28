@@ -1,0 +1,195 @@
+﻿@model IEnumerable<ConsommiTounsi.Models.Category>
+
+}
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.min.css" />
+
+<div id="PlaceHolderHere"></div>
+<div id="PlaceHolderHere1"></div>
+
+<div class="page-content">
+    <div class="container-fluid">
+        <p></p>
+
+
+        <div class="row">
+
+
+
+
+
+            <!-- start page title -->
+            <!-- end page title -->
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div>
+                        <div class="float-end">
+                            <form class="d-inline-flex mb-3">
+                                <label class="form-check-label my-2 me-2" for="order-selectinput">Categories</label>
+                                <select class="form-select" id="order-selectinput">
+                                    <option selected>All</option>
+                                    <option value="1">Active</option>
+                                    <option value="2">Unpaid</option>
+                                </select>
+                            </form>
+
+                        </div>
+                        <button id="btnAddCategory"
+                                data-target="#mySmallModalLabel" data-toggle="ajax-modal" data-url="@Url.Action("CreateCategoryModal")"
+                                type="button" class="btn btn-success waves-effect waves-light mb-3">
+                            <i class="uil-plus"></i> Add New Categorie
+                        </button>
+
+                        </a>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table id="1dtopg" class="table table-centered datatable dt-responsive nowrap table-card-list dataTable no-footer dtr-inline" style="        background-color: #F0F0F0;
+        collapse;
+        border-spacing: 0px 12px;
+        width: 100%;" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+                                <thead>
+                                    <tr class="bg-transparent" role="row">
+                                        <th style="width: 24px;" class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="
+
+
+
+
+                                                : activate to sort column descending">
+                                            <div class="form-check text-center font-size-16">
+                                                <input type="checkbox" class="form-check-input" id="ordercheck">
+                                                <label class="form-check-label" for="ordercheck"></label>
+                                            </div>
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 95px;" aria-label="IdCategorie: activate to sort column ascending">IdCategorie</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 105px;" aria-label="Name: activate to sort column ascending">Name</th>
+
+                                        <th style="width: 120px;" class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+
+                                    @foreach (var item in ViewBag.categories)
+                                    {
+                                        <tr role="row" class="odd">
+                                            <td class="sorting_1 dtr-control">
+                                                <div class="form-check text-center font-size-16">
+                                                    <input type="checkbox" class="form-check-input" id="ordercheck1">
+                                                    <label class="form-check-label" for="ordercheck1"></label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                @item.IdCategory
+                                            </td>
+
+                                            <td>
+                                                @item.Name
+
+                                            </td>
+
+
+
+                                            <td>
+                                          
+
+
+                                                <button type="button" id="btnDeleteCategory" style="background:none;border:none;" class="px-3 text-danger" onclick="confirmDeleteCategory(@item.IdCategory)"><i class="uil uil-trash-alt font-size-18"></i></button>
+
+
+                                                       <button type="button" id="btnEdit"
+                                                        data-toggle="ajax-modal" data-target="#mySmallModalLabel" 
+                                                         data-url="@Url.Action($"updateCategorieModal/{item.IdCategory}")"
+                                                        style="background:none;border:none;" class="px-3 text-primary">
+                                                    <i class="uil uil-pen font-size-18"></i>
+                                                </button>
+
+                                               
+                                            </td>
+                                        </tr>
+
+                                    }
+                                </tbody>
+                            </table>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div> <!-- container-fluid -->
+
+        <br />
+        <br />
+        <br />
+        <br />
+
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- End Page-content -->
+    <script type="text/javascript">
+
+
+        //Remove Event SweetAlert+jquery+ajax
+        function confirmDeleteCategory(idCategory) {
+
+            var id = parseInt(idCategory);
+            
+            swal({
+                title: "Are you sure?",
+                text: "You will not be able to recover this imaginary file!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#f42020",
+                confirmButtonText: "Yes, delete it!",
+                closeOnConfirm: false
+            }).then(function (isConfirm) {
+                if (isConfirm.value) {
+                    $.ajax({
+                        url: "/Category/Delete",
+                        type: "POST",
+                        data: { id: id },
+                        success: function (data) {
+                            console.log("dara" + data);
+                            if (data.status) {
+                                swal("Done!", "It was succesfully deleted!", "success");
+                                setInterval('refreshPage()', 2000);
+                            }
+
+                        }
+                    });
+                } else {
+                    swal("Cancelled", "Failed to delete category :)", "error");
+                }
+            })
+
+
+        }
+
+
+
+
+
+   
+        function refreshPage() {
+            location.reload(true);
+        }
+    </script>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js"></script>
+
+
+
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>

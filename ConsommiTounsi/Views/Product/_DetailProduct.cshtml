@@ -1,0 +1,63 @@
+﻿
+@model ConsommiTounsi.Models.Product
+
+
+<div class="modal fade bs-example-modal-xl show" id="detailProduct" tabindex="-1" aria-labelledby="myExtraLargeModalLabel" style="display: block; padding-right: 16px;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myExtraLargeModalLabel">Extra large modal</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <hr />
+            <div class="modal-body">
+
+                <img src="@ViewBag.ImageUrl" />
+
+
+                <label asp-for="IdEvent" hidden="true"> @Model.IdProduct</label>
+                <hr style="color:red;" />
+                <h3 class="mb-3">
+                    <i class="uil-bookmark-full">
+                        <span style="        color: #e83e8c;
+        font-size: 20px;"><b>@Model.ProductName</b></span>
+    </i>
+</h3>
+                <p>
+
+                    <br />
+                    <i class="uil-shopping-cart-alt">
+
+                        Category <span>@Model.Category.Name </span>
+
+                    </i>
+                    <i class="uil-calculator-alt">
+
+                        created At : <span>@Model.CreatedAt </span>
+
+                    </i>
+
+                    <br />
+                    <i class="uil-dollar-alt">
+
+                        Price <span>@Model.SellPrice </span>
+
+
+                    </i>
+                    <br />
+
+
+
+                </p>
+
+<p class="mb-0">
+    @Model.Description
+</p>
+
+
+
+</div>
+</div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+</div>

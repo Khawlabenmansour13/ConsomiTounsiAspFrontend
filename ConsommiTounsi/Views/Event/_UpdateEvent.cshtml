@@ -1,0 +1,243 @@
+﻿@model ConsommiTounsi.Models.Event
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+
+<div class="modal fade show" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" style="padding-right: 16px; display: block;" aria-modal="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="exampleModalScrollableTitle">Update event</h5>
+                <button type="button" class="btn-close" data-sm-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="addForm" class="needs-validation was-validated" novalidate="" method="post" enctype="multipart/form-data">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="idEvent" hidden="true" placeholder="Enter Title" value="@Model.IdEvent" required="">
+
+                                <label class="form-label" for="validationCustom01">Title</label>
+                                <input type="text" class="form-control" id="titleEvent" placeholder="Enter Title" value="@Model.Title" required="">
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label" for="validationCustom01">Adress</label>
+                                <input type="text" class="form-control" id="addressEvent" placeholder="Enter Adress" value="@Model.Address" required="">
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label class="form-label">Places Number</label>
+                                <select class="form-control form-select" id="totalPlacesEvent" required="">
+                                    <option value="bg-danger" selected="">@Model.NumberOfPlaces</option>
+                                    <option value="bg-success">20</option>
+                                    <option value="bg-primary">30</option>
+                                    <option value="bg-info">40</option>
+                                    <option value="bg-dark">50</option>
+                                </select>
+                                <div class="invalid-feedback">Please select a valid event category</div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="mb-3">
+                        <input type="file" id="imageEvent" name="image" value="@Model.Image" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <div>
+                            <textarea value="" required="" id="descriptionEvent" class="form-control parsley-error" rows="5" data-parsley-id="21" aria-describedby="parsley-id-21">@Model.Description</textarea>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Start Date</label>
+                        <input class="form-control" type="date" value="@Model.StartDate.ToString("yyy-MM-dd")" id="example-date-input">
+
+
+
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">End Date</label>
+                        <input class="form-control" type="date" value="@Model.EndDate.ToString("yyy-MM-dd")"
+" id="example-date-input1">
+
+
+                    </div>
+                    
+
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <br />
+
+                            <div class="mb-3">
+
+                                <label class="form-label" for="validationCustom03">DiscountPercentage</label>
+                                <input type="number" value="@Model.DiscountPercentage" class="form-control" id="discountPercentageEvent" value="
+                                       @Model.DiscountPercentage " placeholder="discount" required="">
+                                <div class="invalid-feedback">
+                                    Please provide a valid city.
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="col-md-4">
+                            <br />
+
+                            <div class="mb-3">
+                                <label class="form-label" for="validationCustom04">Early Participants</label>
+                                <input value="@Model.NbrTicketEarlyParticipants" type="number" class="form-control" id="nbrTicketEarlyParticipants" placeholder="Early " required="">
+                                <div class="invalid-feedback">
+                                    Please provide a valid state.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <br />
+
+                            <div class="mb-3">
+                                <label class="form-label" for="validationCustom05">Ticket Price</label>
+                                <input value="@Model.PriceTicket" type="number" class="form-control" id="ticketPriceEvent" placeholder="Ticket Price" required="">
+                                <div class="invalid-feedback">
+                                    Please provide a valid zip.
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="invalidCheck" required="">
+                                        <label class="form-check-label" for="invalidCheck">Agree to terms and conditions</label>
+                                        <div class="invalid-feedback">
+                                            You must agree before submitting.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="btnEditEvent" onclick="updateEvent(@Model.IdEvent)" class="btn btn-primary" type="button">Submit form</button>
+
+
+
+
+
+
+
+
+                </form>
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<script>
+   
+
+
+    //Update Event
+    function updateEvent(idEvent) {
+
+        $('#addForm').serialize();
+        const format1 = "YYYY-MM-DD HH:mm:ss";
+        dateTime1 = moment($('#example-date-input').val()).format("YYYY-MM-DD");
+        dateTime2 = moment($('#example-date-input1').val()).format("YYYY-MM-DD");
+
+        var nbrTicketEarlyParticipants = parseInt($('#nbrTicketEarlyParticipants').val()); //Output will be 23.
+        var totalPlacesEvent = parseFloat($('#totalPlacesEvent').val()); //Output will be 23.
+        var ticketPriceEvent = parseFloat($('#ticketPriceEvent').val()); //Output will be 23.
+        var discountPercentage = parseFloat($('#discountPercentageEvent').val()); //Output will be 23.
+        var image = $('#imageEvent').val();
+        $("#imageEvent").attr("src", "data:image/png;base64");
+        var conceptName = $('#totalPlacesEvent').find(":selected").text();
+        console.log("ticket = " + ticketPriceEvent);
+        console.log("nbrTicketEarlyParticipants = " + nbrTicketEarlyParticipants);
+        console.log(dateTime2);
+        //json to pass in param
+        var Event = {
+            idEvent: idEvent,
+            startDate: dateTime1,
+            endDate: dateTime2,
+            title: $('#titleEvent').val().trim(),
+            description: $('#descriptionEvent').val(),
+            address: $('#addressEvent').val(),
+            numberOfPlaces: parseInt(conceptName),
+            priceTicket: ticketPriceEvent,
+            nbrTicketEarlyParticipants: nbrTicketEarlyParticipants,
+            discountPercentage: discountPercentage,
+         
+
+        }
+        Event = JSON.stringify({ 'Event': Event });
+        console.log("address = " + Event.address);
+
+        console.log("EvJson =" + Event);
+        console.log("id =" + idEvent);
+        $.ajax({
+            url: "/Event/Edit",
+            contentType: "application/json",
+
+            data: Event,
+            cache: false,
+
+            type: "POST",
+            success: function (data) {
+                console.log(data.response);
+                if (data.response) {
+
+                    console.log(data);
+                    swal({
+                        title: 'Good Job',
+                        text: "Event has been saved !",
+                        type: 'success'
+
+                    }).then(function () {
+
+                        $('#exampleModalScrollable').modal('hide');
+                        setInterval('refreshPage()', 2000);
+
+
+                    });
+ console.log(data);
+                swal({
+                    title: 'Update',
+                    text: "Event has been Updated successfully !",
+                    type: 'success'
+
+                }).then(function () {
+
+                    $('#exampleModalScrollable').modal('hide');
+                    setInterval('refreshPage()', 2000);
+
+
+                });
+                }
+            },
+            error: function (e) {
+                alert('Error Processing your Request!!');
+            }
+
+        })
+    }
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>

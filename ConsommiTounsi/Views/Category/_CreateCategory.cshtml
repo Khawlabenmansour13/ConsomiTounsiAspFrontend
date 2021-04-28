@@ -1,0 +1,108 @@
+﻿
+@model ConsommiTounsi.Models.Event
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+<div class="modal fade bs-example-modal-sm show" tabindex="-1" aria-labelledby="mySmallModalLabel" style="display: block; padding-right: 16px;" aria-modal="true" role="dialog">
+
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" >Add Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body p-4">
+                    <form id="addForm" class="needs-validation was-validated" novalidate="" method="post">
+
+                        <div class="row">
+
+                            <label class="form-label" for="validationCustom01">Name</label>
+                            <input type="text" class="form-control" id="nameCategory" placeholder="Enter Name Category" value="" required="">
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <br />
+                            <br />
+
+                        </div>
+                        <br />
+                        <br />
+                        <br />
+                        <div class="row">
+                            <button id="btnAddCategory" class="btn btn-primary" type="button">Save</button>
+                            </div>
+
+                    </form>
+                </div><!-- /.modal-content -->
+            </div>
+
+            <script>
+
+                $('#btnAddCategory').click(function () {
+
+
+                    $('#addForm').serialize();
+
+                    var title = $('#nameCategory').val();
+
+
+                    //Control name
+
+                    if (title.trim().length == 0) {
+                        //alert("Please Select To Date Grater Than"+startDate);
+                        swal("Error!", "Please fill up title", "error");
+                        return false;
+                    }
+
+                    var catJson = {
+                        name:$("#nameCategory").val()
+                    }
+
+                    console.log("json ===" + JSON.stringify(catJson));
+                    $.ajax({
+                        type: "POST",
+                        url: '/Category/CreateCategory',
+                        data: catJson,
+                      
+
+                        success: function (data) {
+                            console.log(data);
+                            swal({
+                                title: 'Good Job',
+                                text: "Category has been saved !",
+                                type: 'success'
+
+                            }).then(function () {
+
+                                $('#mySmallModalLabel').modal('hide');
+                                setInterval('refreshPage()', 2000);
+
+
+                            });
+
+
+                        },
+
+                        error: function (err) {
+                            swal({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: err.then(error => error),
+                                footer: '<a href>Why do I have this issue?</a>'
+                            })
+                        }
+
+                    });
+
+
+
+                })
+                function refreshPage() {
+                    location.reload(true);
+                }
+
+            </script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+

@@ -1,0 +1,302 @@
+﻿@model IEnumerable<ConsommiTounsi.Models.Product>
+
+@{
+    ViewBag.Title = "ListEvent";
+}
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.min.css" />
+
+<div id="PlaceHolderHere"></div>
+<div id="PlaceHolderHere1"></div>
+
+<div class="page-content">
+    <div class="container-fluid">
+        <p></p>
+
+
+        <div class="row">
+
+
+
+
+            <!-- start page title -->
+            <!-- end page title -->
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div>
+                        <div class="float-end">
+                            <form class="d-inline-flex mb-3">
+                                <label class="form-check-label my-2 me-2" for="order-selectinput">Orders</label>
+                                <select class="form-select" id="order-selectinput">
+                                    <option selected>All</option>
+                                    <option value="1">Active</option>
+                                    <option value="2">Unpaid</option>
+                                </select>
+                            </form>
+
+                        </div>
+                        <button id="btnAddEvent"
+                                data-target="#mymodal" data-toggle="ajax-modal" data-url="@Url.Action("CreateProductModal")"
+                                type="button" class="btn btn-success waves-effect waves-light mb-3">
+                            <i class="uil-plus"></i> Add New Product
+                        </button>
+
+                        </a>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table id="1dtopg" class="table table-centered datatable dt-responsive nowrap table-card-list dataTable no-footer dtr-inline" style="        background-color: #F0F0F0;
+        collapse;
+        border-spacing: 0px 12px;
+        width: 100%;" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+                                <thead>
+                                    <tr class="bg-transparent" role="row">
+                                        <th style="width: 24px;" class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="
+
+
+
+
+                                                : activate to sort column descending">
+                                            <div class="form-check text-center font-size-16">
+                                                <input type="checkbox" class="form-check-input" id="ordercheck">
+                                                <label class="form-check-label" for="ordercheck"></label>
+                                            </div>
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 95px;" aria-label="Name: activate to sort column ascending">Name</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 105px;" aria-label="Price: activate to sort column ascending">Price</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 133px;" aria-label="TextQrCode: activate to sort column ascending">TextQrCode</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 63px;" aria-label="MostViewed Price: activate to sort column ascending">MostViewed</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 163px;" aria-label="CreatedAt: activate to sort column ascending">CreatedAt</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 163px;" aria-label="CreatedAt: activate to sort column ascending">Status</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 163px;" aria-label="Status: activate to sort column ascending">Promotion</th>
+                                        <th style="width: 120px;" class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+
+                                    @foreach (var item in ViewBag.products)
+                                    {
+                                    <tr role="row" class="odd">
+                                        <td class="sorting_1 dtr-control">
+                                            <div class="form-check text-center font-size-16">
+                                                <input type="checkbox" class="form-check-input" id="ordercheck1">
+                                                <label class="form-check-label" for="ordercheck1"></label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @item.ProductName
+                                        </td>
+                                        <td>
+
+
+                                            @item.SellPrice
+                                        </td>
+
+                                        <td>
+
+                                            @item.BarCode
+                                        </td>
+                                       
+
+                                        <td>
+                                            @item.MostViewed
+
+                                        </td>
+                                        <td>
+                                            @item.CreatedAt.ToString("yyyy-MM-dd")
+                                        </td>
+                                        <td>
+                                            @if (item.NewProduct == true)
+                                            {
+                                                <div class="badge bg-pill bg-soft-success font-size-12">New</div>
+
+                                            }
+                                            else
+                                            {
+                                                <div class="badge bg-pill bg-soft-danger font-size-12">Deparcted</div>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (item.PromotionEtat == true)
+                                            {
+                                                <div class="badge bg-pill bg-soft-success font-size-12">Promoted</div>
+
+                                            }
+                                            else
+                                            {
+                                                <div class="badge bg-pill bg-soft-danger font-size-12">Unpromoted</div>
+                                            }
+
+                                           
+
+
+
+                                        </td>
+
+
+                                        <td>
+                                            <input name="idEvent" value="@item.IdProduct" hidden="true" />
+                                            <button type="button" id="btnEdit"
+                                                    data-toggle="ajax-modal" data-target="#exampleModalScrollable" data-url="@Url.Action($"UpdateProductModal/{item.IdProduct}")"
+                                                    style="background:none;border:none;" class="px-3 text-primary">
+                                                <i class="uil uil-pen font-size-18"></i>
+                                            </button>
+
+
+                                            <button type="button" id="btnDelete" style="background:none;border:none;" class="px-3 text-danger" onclick="confirmDelete(@item.IdProduct)"><i class="uil uil-trash-alt font-size-18"></i></button>
+
+
+                                            <button style="background:none;border:none;" class="px-3 text-success"
+                                                    data-toggle="ajax-modal" data-target="#detailProduct" data-url="@Url.Action($"DetailProduct/{item.IdProduct}")">
+                                                <i class="uil uil-ellipsis-v font-size-18"></i>
+                                            </button>
+                                           <img src="@string.Format("https://localhost:44336/Upload/QrCode/"+
+                                                    System.Text.Encoding.UTF8.GetString(item.ImageBareCode))" />
+                                       
+                                        </td>
+                                    </tr>
+
+                                    }
+                                </tbody>
+                            </table>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div> <!-- container-fluid -->
+
+        <br />
+        <br />
+        <br />
+        <br />
+
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- End Page-content -->
+    <script type="text/javascript">
+
+
+      
+        //Remove Event SweetAlert+jquery+ajax
+        function confirmDelete(idProduct) {
+            swal({
+                title: "Are you sure?",
+                text: "You will not be able to recover this imaginary file!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#f42020",
+                confirmButtonText: "Yes, delete it!",
+                closeOnConfirm: false
+            }).then(function (isConfirm) {
+                if (isConfirm.value) {
+                    $.ajax({
+                        url: "/Product/DeleteProdcut",
+                        type: "POST",
+                        data: { id: idProduct },
+                        success: function (data) {
+                            console.log("dara" + data);
+                            if (data.status) {
+                                swal("Done!", "It was succesfully deleted!", "success");
+                                setInterval('refreshPage()', 2000);
+                            }
+
+                        }
+                    });
+                } else {
+                    swal("Cancelled", "Failed to delete event :)", "error");
+                }
+            })
+
+
+        }
+
+
+
+
+
+        //Affecter category evetnt
+        function affecterEvent(id) {
+
+            console.log("hii id event = " + id)// manish nesm fik douda
+
+            swal({
+                title: 'Select Outage Tier',
+                input: 'select',
+                inputOptions: {
+                    'FILM': 'FILM',
+                    'THEATRE': 'THEATRE',
+                    'SOLIDARITY_PROJECT': 'SOLIDARITY_PROJECT'
+                },
+                inputPlaceholder: 'required',
+                showCancelButton: true,
+                closeOnConfirm: false,
+                inputValidator: function (value) {
+                    return new Promise(function (resolve, reject) {
+                        if (value !== '') {
+                            resolve();
+                        } else {
+                            resolve('You need to select a Tier');
+                        }
+                    });
+                }
+            }).then(function (result) {
+                if (!result.isConfirmed) {
+
+                    //ajax request
+                    $.ajax({
+                        url: "/Event/Affecter",
+                        type: "POST",
+                        data: { category: result.value, id: id },
+                        success: function (data) {
+                            console.log("dara" + data);
+                            console.log("id" + id);
+                            console.log("category" + result.value);
+                            console.log("datra" + data.response);
+                            if (data.status) {
+                                swal({
+                                    icon: 'success',
+                                    html: 'You selected: ' + result.value
+                                });
+                                setInterval('refreshPage()', 2000);
+                            }
+
+                        }
+                    });
+
+
+
+                    //
+                    swal("Done!", "you selected category " + result.value, "success");
+
+                }
+            });
+
+
+
+        }
+
+        function refreshPage() {
+            location.reload(true);
+        }
+    </script>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js"></script>
+
+
+
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>

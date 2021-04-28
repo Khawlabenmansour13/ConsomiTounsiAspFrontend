@@ -1,0 +1,126 @@
+﻿@model ConsommiTounsi.Models.Category
+
+<div class="modal fade bs-example-modal-sm show" tabindex="-1" aria-labelledby="mySmallModalLabel" style="display: block; padding-right: 21px;" aria-modal="true" role="dialog">
+
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0">Add Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body p-4">
+                    <form id="addForm" class="needs-validation was-validated" novalidate="" method="post">
+
+                        <div class="row">
+
+                            <label class="form-label" for="validationCustom01">Name</label>
+                            <input type="text" class="form-control" id="nameCategory" placeholder="Enter Name Category" value="@Model.Name" required="">
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <br>
+                            <br>
+
+                        </div>
+                        <br>
+                        <br>
+                        <br>
+                        <div class="row">
+                            <button id="btnAddCategory" class="btn btn-primary" type="button" onclick="updateCateory(@Model.IdCategory)">Save</button>
+                        </div>
+
+                    </form>
+                </div><!-- /.modal-content -->
+            </div>
+
+     
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+        </div>
+    </div>
+</div>
+
+
+            <script>
+
+
+
+                //Update Event
+                function updateCateory(idCategory) {
+
+                    var nameCategory = $("#nameCategory").val();
+                    $('#addForm').serialize();
+
+
+
+                    if ($("#nameCategory").val().trim() == "") {
+                        swal({
+                            icon: 'error',
+                            title: 'Required inputs...',
+                            text: 'Something went wrong!',
+                            footer: '<a href>Why do I have this issue?</a>'
+                        })
+                        return;
+                    }
+                    //json to pass in param
+                    var Category = {
+                        idCategory: idCategory,
+                        name: nameCategory
+
+
+                    }
+                    Category = JSON.stringify({ 'Category': Category });
+                    console.log("address = " + Event.address);
+
+                    console.log("categoryJson =" + Category);
+                    console.log("id =" + idCategory);
+                    $.ajax({
+                        url: "/Category/Edit",
+                        contentType: "application/json",
+
+                        data: Category,
+                        cache: false,
+
+                        type: "POST",
+                        success: function (data) {
+                            console.log(data.response);
+                            if (data.response) {
+
+                                console.log(data);
+                                swal({
+                                    title: 'Good Job',
+                                    text: "Category has been saved !",
+                                    type: 'success'
+
+                                }).then(function () {
+
+                                    $('#exampleModalScrollable').modal('hide');
+                                    setInterval('refreshPage()', 2000);
+
+
+                                });
+                                console.log(data);
+                                swal({
+                                    title: 'Update',
+                                    text: "category has been Updated successfully !",
+                                    type: 'success'
+
+                                }).then(function () {
+
+                                    $('#exampleModalScrollable').modal('hide');
+                                    setInterval('refreshPage()', 2000);
+
+
+                                });
+                            }
+                        },
+                        error: function (e) {
+                            alert('Error Processing your Request!!');
+                        }
+
+                    })
+                }
+            </script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>

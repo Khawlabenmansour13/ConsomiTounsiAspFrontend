@@ -1,0 +1,199 @@
+﻿@model ConsommiTounsi.Models.Product
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+
+<div class="modal fade show" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" style="padding-right: 16px; display: block;" aria-modal="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="exampleModalScrollableTitle">Update product</h5>
+                <button type="button" class="btn-close" data-sm-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="addForm" class="needs-validation was-validated" novalidate="" method="post" enctype="multipart/form-data">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="idProduct" hidden="true" placeholder="Enter Title" value="@Model.IdProduct" required="">
+
+                                <label class="form-label" for="validationCustom01">Name</label>
+                                <input type="text" class="form-control" id="titleProduct" placeholder="Enter Title" value="@Model.ProductName" required="">
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label" for="validationCustom01">Price</label>
+                                <input type="text" class="form-control" id="sellPriceProduct" placeholder="Enter Price" value="@Model.SellPrice" required="">
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label class="form-label">Category</label>
+                                <select class="form-control form-select" id="categorieProduct" required="">
+
+                                    @foreach (var cat in ViewBag.categories)
+                                    {
+                                        <option id="idCategory" value="@cat.IdCategory">@cat.IdCategory</option>
+
+                                    }
+                                </select>
+                                <div class="invalid-feedback">Please select a valid  category</div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="mb-3">
+                        <input type="file" id="pictureProduct" name="image" value="@Model.Picture" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <div>
+                            <textarea value="" required="" id="descriptionProduct" class="form-control parsley-error" rows="5" data-parsley-id="21" aria-describedby="parsley-id-21">@Model.Description</textarea>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="row">
+
+
+
+
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="invalidCheck" required="">
+                                    <label class="form-check-label" for="invalidCheck">Agree to terms and conditions</label>
+                                    <div class="invalid-feedback">
+                                        You must agree before submitting.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="btnEditProduct" onclick="updateProduct(@Model.IdProduct)" class="btn btn-primary" type="button">Update</button>
+
+
+
+
+
+
+
+
+                </form>
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<script>
+
+    
+
+
+ 
+
+    //Update Event
+    function updateProduct(idProduct) {
+
+        $('#addForm').serialize();
+
+        var idCategory = $("select").children(":selected").attr("value");
+        var idProduct = parseInt($("#idProduct").val());
+        var productName = $("#titleProduct").val();
+        var description = $("#descriptionProduct").val();
+        var sellPriceProduct = parseFloat($("#sellPriceProduct").val());
+        var imageProduct = $("#imageProduct").val();
+
+
+        //json to pass in param
+        var Product = {
+            idProduct: idProduct,
+            productName: productName,
+            sellPrice: sellPriceProduct,
+            description: description,
+      
+ 
+
+
+        }
+        Product = JSON.stringify({ 'Product': Product });
+        $.ajax({
+            url: "/Product/Edit",
+            contentType: "application/json",
+            data: Product,
+            cache: false,
+            type: "POST",
+            success: function (data) {
+
+                console.log(data);
+                swal({
+                    title: 'Update',
+                    text: "Product has been Updated successfully !",
+                    type: 'success'
+
+                }).then(function () {
+
+                    $('#exampleModalScrollable').modal('hide');
+                    setInterval('refreshPage()', 2000);
+
+
+                });
+
+            },
+            error: function (e) {
+                alert('Error Processing your Request!!');
+            }
+
+        });
+
+  
+
+
+
+
+
+
+        //ajax request
+        $.ajax({
+            url: "/Product/Affecter",
+            type: "POST",
+            data: { idp: idProduct, idc: idCategory },
+            success: function (data) {
+               
+                if (data.response) {
+                    swal({
+                        icon: 'success',
+                        html: 'category affected successfully'
+                    });
+                    setInterval('refreshPage()', 2000);
+                }
+
+            }
+        });
+
+
+    }
+
+
+   
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
